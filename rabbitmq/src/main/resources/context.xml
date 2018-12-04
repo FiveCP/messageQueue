@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+http://www.springframework.org/schema/rabbit/spring-rabbit-1.7.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<rabbit:connection-factory id="connectionFactory"
+		host="127.0.0.1" port="5672" username="scott" password="tiger"
+		virtual-host="/wcp" />
+
+	<rabbit:template id="amqbTemplate" connection-factory="connectionFactory"
+		exchange="spring_exchange"/>
+
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<rabbit:queue name="myQueue" auto-declare="true" durable="true" />
+
+	<rabbit:fanout-exchange name="spring_exchange"
+		auto-declare="true">
+		<rabbit:bindings>
+			<rabbit:binding queue="myQueue"></rabbit:binding>
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+
+    <rabbit:fanout-exchange name="spring_exchange"
+		auto-declare="true">
+		<rabbit:bindings>
+			<rabbit:binding queue="myQueue"></rabbit:binding>
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<bean id="foo" class="com.wcp.rabbitmq.spring.Consumer" />
+
+</beans>
